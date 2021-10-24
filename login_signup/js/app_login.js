@@ -35,6 +35,8 @@ document.getElementById("btn_submit").addEventListener("click", function () {
       const user = userCredential.user;
       // ...
       alert("User logged in successfully");
+      window.location.href = "../../Dashboard/srtdash/index.html";
+
     })
     .catch((error) => {
       const errorCode = error.code;
