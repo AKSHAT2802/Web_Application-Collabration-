@@ -4,8 +4,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase
 import {
   getAuth,
   onAuthStateChanged,
-  signOut 
+  signOut,
 } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,7 +32,7 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 const user = auth.currentUser;
-
+const db = getFirestore(app);
 
 console.log("Hello");
 
@@ -41,7 +46,69 @@ onAuthStateChanged(auth, (user) => {
     // ...
     //alert("User is looged in "+uid);
     console.log("email: " + email);
-    document.getElementById("username").innerHTML = email;
+    // document.getElementById("username").innerHTML = email;
+
+    const docRef = doc(db, "faculty_info", email);
+    //const docSnap = getDoc(docRef);
+
+    getDoc(doc(db, "faculty_info", email)).then((docSnap) => {
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+      } else {
+        console.log("No such document!");
+      }
+    });
+
+
+    /* Reading data from firestore
+    https://www.youtube.com/watch?v=dMx4ug7XVoo 
+    */
+    // Converting object into string
+    class Faculty {
+      constructor(name, email, phoneNo) {
+        this.name = name;
+        this.email = email;
+        this.phoneNo = phoneNo;
+      }
+      toString() {
+        // return this.name + ", " + this.email + ", " + this.phoneNo;
+        return this.name;
+      }
+    }
+
+    // Firestore data converter
+    const facultyConverter = {
+      toFirestore: (faculty) => {
+        return {
+          name: faculty.name,
+          email: faculty.email,
+          phoneNo: faculty.phoneNo,
+        };
+      },
+      fromFirestore: (snapshot, options) => {
+        const data = snapshot.data(options);
+        return new Faculty(data.F_Name, data.F_Email, data.F_PhoneNo);
+      },
+    };
+
+    const ref = doc(db, "faculty_info", email).withConverter(facultyConverter);
+    getDoc(doc(db, "faculty_info", email).withConverter(facultyConverter)).then((docSnap) => {
+      if (docSnap.exists()) {
+        // Convert to City object
+        const faculty = docSnap.data();
+        // Use a City instance method
+        console.log(faculty.toString());
+        document.getElementById("username").innerHTML = faculty.toString();
+      } else {
+        console.log("No such document!");
+      }
+    });
+
+    
+
+
+
+
   } else {
     // User is signed out
     // ...
