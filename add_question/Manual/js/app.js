@@ -5,6 +5,7 @@ import {
   getFirestore,
   doc,
   setDoc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -26,6 +27,7 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
 const db = getFirestore(app);
+
 
 document.getElementById("btn_submit").addEventListener("click", function () {
     console.log("Hello");
@@ -53,3 +55,8 @@ document.getElementById("btn_submit").addEventListener("click", function () {
   alert("Question Added successfully");
   console.log("Question added in the firestore");
 });
+
+
+
+
+
