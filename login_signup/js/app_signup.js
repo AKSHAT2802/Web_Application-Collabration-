@@ -60,6 +60,7 @@ document.getElementById("btn_submit").addEventListener("click", function () {
       ) {
         alert("Account already exist with given email");
         flag = 2;
+        location.reload();
       }
     });
     console.log(flag);
