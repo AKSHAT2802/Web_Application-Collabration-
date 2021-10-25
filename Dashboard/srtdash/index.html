@@ -343,11 +343,14 @@
                     <div class="col-sm-6 clearfix">
                         <div class="user-profile pull-right">
                             <img class="avatar user-thumb" src="assets/images/author/avatar.png" alt="avatar">
-                            <h4 class="user-name dropdown-toggle" data-toggle="dropdown">Username <i class="fa fa-angle-down"></i></h4>
+                            <h4 class="user-name dropdown-toggle" data-toggle="dropdown" id="username">Username <i class="fa fa-angle-down"></i></h4>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Message</a>
                                 <a class="dropdown-item" href="#">Settings</a>
-                                <a class="dropdown-item" href="#">Log Out</a>
+                                <a class="dropdown-item" type="submit" id="btn_logout">Log Out</a>
+                                <!-- <button class="dropdown-item" id="btn_submit" type="submit">
+                                    Log Out
+                                </button> -->
                             </div>
                         </div>
                     </div>
@@ -672,6 +675,8 @@
             </div>
         </div>
     </div>
+
+    <script src="../js/app.js" type="module"></script>
     <!-- offset area end -->
     <!-- jquery latest version -->
     <script src="assets/js/vendor/jquery-2.2.4.min.js"></script>

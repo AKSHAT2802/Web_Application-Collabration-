@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-analytics.js";
 import {
   getAuth,
-  signInWithEmailAndPassword,
+  signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -35,18 +35,43 @@ document.getElementById("btn_submit").addEventListener("click", function () {
       const user = userCredential.user;
       // ...
       alert("User logged in successfully");
-      window.location.href = "../../Dashboard/srtdash/index.html";
 
+      //const user = auth.currentUser;
+      if (user !== null) {
+        // The user object has basic properties such as display name, email, etc.
+        //const displayName = user.displayName;
+        const email2 = user.email;
+        // const photoURL = user.photoURL;
+        // const emailVerified = user.emailVerified;
+
+        // The user's ID, unique to the Firebase project. Do NOT use
+        // this value to authenticate with your backend server, if
+        // you have one. Use User.getToken() instead.
+        const uid = user.uid;
+        //console.log("Name: "+displayName);
+        console.log("Email: "+email2);
+        //console.log("UID: "+uid);
+      }
+
+      window.location.href = "../../Dashboard/srtdash/index.html";
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorCode+errorMessage);
+      console.log(errorCode + errorMessage);
 
-      if(errorCode+errorMessage == "auth/wrong-passwordFirebase: Error (auth/wrong-password).")
-      {
-          console.log("Invalid Credentials");
-          alert("Invalid Credentials");
+      if (
+        errorCode + errorMessage ==
+        "auth/wrong-passwordFirebase: Error (auth/wrong-password)."
+      ) {
+        console.log("Invalid Credentials");
+        alert("Invalid Credentials");
       }
+      else
+      {
+        alert(errorMessage);
+      }
+      //alert(errorMessage);
     });
 });
+
