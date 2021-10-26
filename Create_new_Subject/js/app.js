@@ -56,6 +56,7 @@ document.getElementById("btn_submit").addEventListener("click", function () {
   const C_name = document.getElementById("C_Name").value;
   const C_Code = document.getElementById("C_Code").value;
   const C_Credits = document.getElementById("C_Credits").value;
+  const C_Description = document.getElementById("C_Description").value;
   //   const C_Faculty = document.getElementById("opt_C").value;
   
   // adding document of new faculty member in firestore
@@ -75,4 +76,13 @@ document.getElementById("btn_submit").addEventListener("click", function () {
     courses: arrayUnion(C_name)
   });
   console.log("Update successfully in faculty_info");
+
+
+
+  setDoc(doc(db, C_name, "README"), {
+    C_Description: C_Description
+  });
+  console.log("Created new collection of Course_name");
+
+  window.location.href = "../../Dashboard/srtdash/index.html";
 });

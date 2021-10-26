@@ -80,5 +80,6 @@ document.getElementById("btn_submit").addEventListener("click", function () {
     // });
 
     console.log("User added in the firestore");
+
   }
 });
