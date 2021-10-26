@@ -77,7 +77,7 @@
                             </li>
 
 
-                            <!-- <li>
+                            <li>
                                 <a href="javascript:void(0)" aria-expanded="true"><i
                                         class="ti-layout-sidebar-left"></i><span>
                                         Add Questions
@@ -86,7 +86,7 @@
                                     <li><a href="../../add_question/Manual/add_question.html">Manually</a></li>
                                     <li><a href="../../add_question/Excel/add_question_excel.html">Excel Sheet</a></li>
                                 </ul>
-                            </li> -->
+                            </li>
                             <!--
                             <li>
                                 <a href="javascript:void(0)" aria-expanded="true"><i class="ti-pie-chart"></i><span>Charts</span></a>
@@ -408,7 +408,6 @@
                                 <th>Course Code</th>
                                 <th>Course Credits</th>
                                 <th>Course Faculty</th>
-                                <th>View</th>
                             </thead>
                             <tbody id="tbody1">
 
@@ -482,20 +481,16 @@
                             let td2 = document.createElement("td");
                             let td3 = document.createElement("td");
                             let td4 = document.createElement("td");
-                            let td5 = document.createElement("td");
 
                             td1.innerHTML = name;
                             td2.innerHTML = code;
                             td3.innerHTML = credit;
                             td4.innerHTML = faculty;
-                            td5.innerHTML = "<a href='../../Create_new_Subject/create_new_subject.html'><i class='fa fa-eye' aria-hidden='true' ></i></a>";
-                            
 
                             trow.appendChild(td1);
                             trow.appendChild(td2);
                             trow.appendChild(td3);
                             trow.appendChild(td4);
-                            trow.appendChild(td5);
 
                             Tbody.appendChild(trow);
                         }
