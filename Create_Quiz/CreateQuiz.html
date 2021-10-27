@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Subject</title>
+    <title>Create New Subject</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="../../Dashboard/srtdash/assets/images/icon/favicon.ico">
     <link rel="stylesheet" href="../../Dashboard/srtdash/assets/css/bootstrap.min.css">
@@ -395,7 +395,193 @@
             <div class="main-content-inner">
 
 
-                <button type="submit" id="create_quiz" style="background-color: #4CAF50; /* Green */
+                <label for="C_name">Quiz Name </label>
+                <input style="margin-left: 60px;" type="text" placeholder="Enter Quiz Name" id="Q_Name"></input>
+                <br>
+                <br>
+
+
+                <div class="container mt-3">
+                    <table class="table table-dark">
+                        <thead>
+                            <th>Question Type</th>
+                            <th>Marks</th>
+                            <th>Question</th>
+                            <th>Option A</th>
+                            <th>Option B</th>
+                            <th>Option C</th>
+                            <th>Option D</th>
+                            <th>Correct Ans</th>
+                            <th>Add</th>
+                        </thead>
+                        <tbody id="tbody1">
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <script type="module">
+
+                    //Get all data from firestore
+                    // Import the functions you need from the SDKs you need
+
+                    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+                    // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-analytics.js";
+                    import {
+                        getFirestore,
+                        doc,
+                        getDoc,
+                        getDocs,
+                        onSnapshot,
+                        collection
+                    } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+                    import {
+                        getAuth,
+                        onAuthStateChanged
+                    } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js";
+                    // TODO: Add SDKs for Firebase products that you want to use
+                    // https://firebase.google.com/docs/web/setup#available-libraries
+
+                    // Your web app's Firebase configuration
+                    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+                    const firebaseConfig = {
+                        apiKey: "AIzaSyB8Y7OU15I_IyIomfTOEXL0MVsI8Pcbd5g",
+                        authDomain: "gearup-d7328.firebaseapp.com",
+                        projectId: "gearup-d7328",
+                        storageBucket: "gearup-d7328.appspot.com",
+                        messagingSenderId: "611471043795",
+                        appId: "1:611471043795:web:e6df90d2e826fa7a983826",
+                        measurementId: "G-EL8DJYYRTE",
+                    };
+
+                    // Initialize Firebase
+                    const app = initializeApp(firebaseConfig);
+
+                    const params = new URLSearchParams(document.location.search);
+                    const name = params.get("subject");
+                    const db = getFirestore(app);
+                    var Question_no = 0;
+                    var Tbody = document.getElementById("tbody1");
+                    // function view(){
+                    //     window.location.href = "../../Create_new_Subject/create_new_subject.html";
+                    // }
+
+                    function AddItemToTable(type, marks, question, OA, OB, OC, OD, CA) {
+                        let trow = document.createElement("tr");
+                        trow.id = Question_no;
+                        let td1 = document.createElement("td");
+                        td1.className = 'row-data';
+                        let td2 = document.createElement("td");
+                        td2.className = 'row-data';
+                        let td3 = document.createElement("td");
+                        td3.className = 'row-data';
+                        let td4 = document.createElement("td");
+                        td4.className = 'row-data';
+                        let td5 = document.createElement("td");
+                        td5.className = 'row-data';
+                        let td6 = document.createElement("td");
+                        td6.className = 'row-data';
+                        let td7 = document.createElement("td");
+                        td7.className = 'row-data';
+                        let td8 = document.createElement("td");
+                        td8.className = 'row-data';
+                        let td9 = document.createElement("td");
+                        td9.className = 'addQuestion';
+                        td9.setAttribute("id", "add1234");
+
+                        td1.innerHTML = type;
+                        td2.innerHTML = marks;
+                        td3.innerHTML = question;
+                        td4.innerHTML = OA;
+                        td5.innerHTML = OB;
+                        td6.innerHTML = OC;
+                        td7.innerHTML = OD;
+                        td8.innerHTML = CA;
+
+                         td9.innerHTML = "<button type='submit' value='AddQuestion'  >Add </button>";
+                        //td9.innerHTML = "<a href='../../subject_homePage/Subject_home_page.html?subject="+name+"' ><i class='fa fa-eye' aria-hidden='true' ></i></a>"
+
+                        trow.appendChild(td1);
+                        trow.appendChild(td2);
+                        trow.appendChild(td3);
+                        trow.appendChild(td4);
+                        trow.appendChild(td5);
+                        trow.appendChild(td6);
+                        trow.appendChild(td7);
+                        trow.appendChild(td8);
+                        trow.appendChild(td9);
+
+                        Tbody.appendChild(trow);
+                        Question_no += 1;
+                    }
+
+                   
+
+                    function AddAllItemsToTable(Question) {
+                            Tbody.innerHTML = "";
+                            console.log("Question: ");
+                            console.log(Question);
+                            Question.forEach(element => {
+                            // AddItemToTable(element.Questions[0],
+                            // element.Questions[0].get('marks'),
+                            // element.Questions[0].get('Question'),
+                            // element.Questions[0].get('optionA'),
+                            // element.Questions[0].get('optionB'),
+                            // element.Questions[0].get('optionC'),
+                            // element.Questions[0].get('optionD'),
+                            // element.Questions[0].get('correct_ans'));
+                            
+                            // console.log(element.Questions[0]['Question']);
+                            // var mymap = new Map();
+                            // //mymap.set(element.Questions[0]);
+                            //   console.log(mymap);
+                            //   console.log('Hi');
+                            
+                            // working below code
+                            // AddItemToTable(element.Questions[0],
+                            // element.Questions[0]['marks'],
+                            // element.Questions[0]['Question'],
+                            // element.Questions[0]['optionA'],
+                            // element.Questions[0]['optionB'],
+                            // element.Questions[0]['optionC'],
+                            // element.Questions[0]['optionD'],
+                            // element.Questions[0]['correct_ans']);
+
+                            // });
+
+                            // updation: use getDoc() to check whether questions field is availble or not
+                            // Here the edge case is REDME file document and Quiz geerated document
+                            for (let i = 0; i < element.Questions.length; i++) {
+  
+
+                            AddItemToTable(element.Questions[i]['type'],
+                            element.Questions[i]['marks'],
+                            element.Questions[i]['Question'],
+                            element.Questions[i]['optionA'],
+                            element.Questions[i]['optionB'],
+                            element.Questions[i]['optionC'],
+                            element.Questions[i]['optionD'],
+                            element.Questions[i]['correct_ans']);
+                            }
+                            });
+                            
+                        }
+                    
+                    async function getAllDataOnce() {
+                            const querySnapshot = await getDocs(collection(db, name));
+                            var Chapter = [];
+                            querySnapshot.forEach(doc => {
+                                Chapter.push(doc.data());
+                            });
+                            AddAllItemsToTable(Chapter);
+                    }
+
+                    window.onload = getAllDataOnce;
+
+
+                </script>
+
+                <button type="submit" id="btn_submit" style="background-color: #4CAF50; /* Green */
                             border: none;
                             color: white;
                             padding: 15px 32px;
@@ -403,33 +589,6 @@
                             text-decoration: none;
                             display: inline-block;
                             font-size: 16px;">Create Quiz</button>
-
-                <button type="submit"  id="ADM" style="background-color: #4CAF50; /* Green */
-                            border: none;
-                            color: white;
-                            padding: 15px 32px;
-                            text-align: center;
-                            text-decoration: none;
-                            display: inline-block;
-                            font-size: 16px;">Add Questions Manually </button>
-
-                <button type="submit" id="btn_submit" style="background-color: #4CAF50; /* Green */
-                            border: none;
-                            color: white;
-                            padding: 15px 32px;
-                            text-align: center;
-                            text-decoration: none;
-                            display: inline-block;
-                            font-size: 16px;">Add Question Excel Sheet</button>
-
-                <button type="submit" id="btn_submit" style="background-color: #4CAF50; /* Green */
-                            border: none;
-                            color: white;
-                            padding: 15px 32px;
-                            text-align: center;
-                            text-decoration: none;
-                            display: inline-block;
-                            font-size: 16px;">View Quiz Response</button>
 
 
 
@@ -630,7 +789,7 @@
             <script src="js/app.js" type="module"></script>
 
             <!-- for logout and username displaying -->
-            <script src="../Dashboard/js/app.js" type="module"></script>
+            <script src="../../Dashboard/js/app.js" type="module"></script>
 
             <!-- offset area end -->
             <!-- jquery latest version -->
