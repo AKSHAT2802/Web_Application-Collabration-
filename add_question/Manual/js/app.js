@@ -5,6 +5,8 @@ import {
   getFirestore,
   doc,
   setDoc,
+  updateDoc,
+  arrayUnion,
   getDoc
 } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -28,9 +30,11 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
+const params = new URLSearchParams(document.location.search);
+const name = params.get("subject");
 
 document.getElementById("btn_submit").addEventListener("click", function () {
-    console.log("Hello");
+  console.log("Hello");
   const question = document.getElementById("question").value;
   const optionA = document.getElementById("opt_A").value;
   const optionB = document.getElementById("opt_B").value;
@@ -42,21 +46,38 @@ document.getElementById("btn_submit").addEventListener("click", function () {
 
   // adding document of new faculty member in firestore
   // Add a new document in collection "faculty_info"
-  setDoc(doc(db, "quiz", chapter), {
-    Q_Type: "1",
-    Q_mark: marks,
+
+  // var myarr=[];
+  //var ls = ["1",marks,question,optionA,optionB,optionC,optionD,correct_ans];
+  //myarr.push(ls);
+
+  var newMap = {
+    type: "1",
+    marks: marks,
     Question: question,
-    OptionA: optionA,
-    OptionB: optionB,
-    OptionC: optionC,
-    OptionD: optionD,
-    Correct_Ans: correct_ans
+    optionA: optionA,
+    optionB: optionB,
+    optionC: optionC,
+    optionD: optionD,
+    correct_ans: correct_ans,
+  };
+
+  getDoc(doc(db, name, chapter)).then((docSnap) => {
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      // updateDoc
+      const chapterRef = doc(db, name, chapter);
+      updateDoc(chapterRef, {
+        Questions: arrayUnion(newMap),
+      });
+      console.log("Update successfully in chapter");
+    } else {
+      console.log("No such document!");
+      setDoc(doc(db, name, chapter), {
+        Questions: arrayUnion(newMap),
+      });
+      alert("Question Added successfully");
+      console.log("Question added in the firestore");
+    }
   });
-  alert("Question Added successfully");
-  console.log("Question added in the firestore");
 });
-
-
-
-
-

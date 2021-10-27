@@ -84,5 +84,5 @@ document.getElementById("btn_submit").addEventListener("click", function () {
   });
   console.log("Created new collection of Course_name");
 
-  window.location.href = "../../Dashboard/srtdash/index.html";
+  //window.location.href = "../../Dashboard/srtdash/index.html";
 });
