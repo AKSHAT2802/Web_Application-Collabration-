@@ -70,6 +70,7 @@ document.getElementById("btn_submit").addEventListener("click", function () {
       updateDoc(chapterRef, {
         Questions: arrayUnion(newMap),
       });
+      alert("Question Added successfully");
       console.log("Update successfully in chapter");
     } else {
       console.log("No such document!");

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Create New Subject</title>
+    <title>Create Quiz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="../../Dashboard/srtdash/assets/images/icon/favicon.ico">
     <link rel="stylesheet" href="../../Dashboard/srtdash/assets/css/bootstrap.min.css">
@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="../../Dashboard/srtdash/assets/css/default-css.css">
     <link rel="stylesheet" href="../../Dashboard/srtdash/assets/css/styles.css">
     <link rel="stylesheet" href="../../Dashboard/srtdash/assets/css/responsive.css">
+
+    
     <!-- modernizr css -->
     <script src="../../Dashboard/srtdash/assets/js/vendor/modernizr-2.8.3.min.js"></script>
 
@@ -369,12 +371,14 @@
                 <div class="row align-items-center">
                     <div class="col-sm-6">
                         <div class="breadcrumbs-area clearfix">
-                            <h4 class="page-title pull-left">Create New Subject</h4>
+                            <h4 id ="Subject_Name" class="page-title pull-left">Subject Home Page </h4>
+                            
                             <!-- <ul class="breadcrumbs pull-left">
                                 <li><a href="index.html">Home</a></li>
                                 <li><span>Dashboard</span></li>
                             </ul> -->
                         </div>
+                        
                     </div>
                     <div class="col-sm-6 clearfix">
                         <div class="user-profile pull-right">
@@ -394,15 +398,14 @@
             <!-- page title area end -->
             <div class="main-content-inner">
 
-
                 <label for="C_name">Quiz Name </label>
-                <input style="margin-left: 60px;" type="text" placeholder="Enter Quiz Name" id="Q_Name"></input>
+                <input style="margin-left: 60px;" type="text" placeholder="Enter Quiz Name" id="QuizName"></input>
                 <br>
                 <br>
 
 
                 <div class="container mt-3">
-                    <table class="table table-dark">
+                    <table class="table ">
                         <thead>
                             <th>Question Type</th>
                             <th>Marks</th>
@@ -413,12 +416,20 @@
                             <th>Option D</th>
                             <th>Correct Ans</th>
                             <th>Add</th>
+                            <th>QuestionNo</th>
                         </thead>
                         <tbody id="tbody1">
 
                         </tbody>
                     </table>
                 </div>
+                
+
+                <script>
+                    var localQues = [];
+                    var QuizQuestions = [];
+
+                </script>
 
                 <script type="module">
 
@@ -432,8 +443,10 @@
                         doc,
                         getDoc,
                         getDocs,
+                        setDoc,
                         onSnapshot,
-                        collection
+                        collection,
+                        updateDoc
                     } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
                     import {
                         getAuth,
@@ -462,6 +475,9 @@
                     const db = getFirestore(app);
                     var Question_no = 0;
                     var Tbody = document.getElementById("tbody1");
+                    
+
+
                     // function view(){
                     //     window.location.href = "../../Create_new_Subject/create_new_subject.html";
                     // }
@@ -485,9 +501,11 @@
                         td7.className = 'row-data';
                         let td8 = document.createElement("td");
                         td8.className = 'row-data';
-                        let td9 = document.createElement("td");
-                        td9.className = 'addQuestion';
-                        td9.setAttribute("id", "add1234");
+                        let td9 = document.createElement("button");
+
+                        let td10 = document.createElement("td");
+                        //td9.id = 'add1234';
+                        //td9.setAttribute("id", "add1234");
 
                         td1.innerHTML = type;
                         td2.innerHTML = marks;
@@ -497,9 +515,12 @@
                         td6.innerHTML = OC;
                         td7.innerHTML = OD;
                         td8.innerHTML = CA;
+                        td10.innerHTML = Question_no;
 
-                         td9.innerHTML = "<button type='submit' value='AddQuestion'  >Add </button>";
+                        td9.innerHTML = "<button id =" + Question_no + "value='Add' onclick='myFunction((this.id,this.value).toString())'>Add Question</button>";
                         //td9.innerHTML = "<a href='../../subject_homePage/Subject_home_page.html?subject="+name+"' ><i class='fa fa-eye' aria-hidden='true' ></i></a>"
+                        //td9.innerHTML = "<button onclick='myFunction(type, marks, question, OA, OB, OC, OD, CA)'>Click me</button>";
+
 
                         trow.appendChild(td1);
                         trow.appendChild(td2);
@@ -510,18 +531,21 @@
                         trow.appendChild(td7);
                         trow.appendChild(td8);
                         trow.appendChild(td9);
+                        trow.appendChild(td10);
 
                         Tbody.appendChild(trow);
                         Question_no += 1;
                     }
 
-                   
+                    // function myFunction() {
+                    //     document.getElementById("demo").innerHTML = "Hello World";
+                    // }
 
                     function AddAllItemsToTable(Question) {
-                            Tbody.innerHTML = "";
-                            console.log("Question: ");
-                            console.log(Question);
-                            Question.forEach(element => {
+                        Tbody.innerHTML = "";
+                        console.log("Question: ");
+                        console.log(Question);
+                        Question.forEach(element => {
                             // AddItemToTable(element.Questions[0],
                             // element.Questions[0].get('marks'),
                             // element.Questions[0].get('Question'),
@@ -530,13 +554,13 @@
                             // element.Questions[0].get('optionC'),
                             // element.Questions[0].get('optionD'),
                             // element.Questions[0].get('correct_ans'));
-                            
+
                             // console.log(element.Questions[0]['Question']);
                             // var mymap = new Map();
                             // //mymap.set(element.Questions[0]);
                             //   console.log(mymap);
                             //   console.log('Hi');
-                            
+
                             // working below code
                             // AddItemToTable(element.Questions[0],
                             // element.Questions[0]['marks'],
@@ -552,33 +576,78 @@
                             // updation: use getDoc() to check whether questions field is availble or not
                             // Here the edge case is REDME file document and Quiz geerated document
                             for (let i = 0; i < element.Questions.length; i++) {
-  
 
-                            AddItemToTable(element.Questions[i]['type'],
-                            element.Questions[i]['marks'],
-                            element.Questions[i]['Question'],
-                            element.Questions[i]['optionA'],
-                            element.Questions[i]['optionB'],
-                            element.Questions[i]['optionC'],
-                            element.Questions[i]['optionD'],
-                            element.Questions[i]['correct_ans']);
+
+                                AddItemToTable(element.Questions[i]['type'],
+                                    element.Questions[i]['marks'],
+                                    element.Questions[i]['Question'],
+                                    element.Questions[i]['optionA'],
+                                    element.Questions[i]['optionB'],
+                                    element.Questions[i]['optionC'],
+                                    element.Questions[i]['optionD'],
+                                    element.Questions[i]['correct_ans']);
+
+                                let current_question = new Map();
+                                current_question.set('type', element.Questions[i]['type'])
+                                .set('marks', element.Questions[i]['marks'])
+                                .set('Question', element.Questions[i]['Question'])
+                                .set('optionA', element.Questions[i]['optionA'])
+                                .set('optionB', element.Questions[i]['optionB'])
+                                .set('optionC', element.Questions[i]['optionC'])
+                                .set('optionD', element.Questions[i]['optionD'])
+                                .set('correct_ans', element.Questions[i]['correct_ans']);
+                                localQues.push(current_question);
+
                             }
-                            });
-                            
-                        }
-                    
-                    async function getAllDataOnce() {
-                            const querySnapshot = await getDocs(collection(db, name));
-                            var Chapter = [];
-                            querySnapshot.forEach(doc => {
-                                Chapter.push(doc.data());
-                            });
-                            AddAllItemsToTable(Chapter);
+                            console.log("LocalQuestion array:");
+                            console.log(localQues);
+                        });
+
                     }
 
-                    window.onload = getAllDataOnce;
+                    async function getAllDataOnce() {
+                        const querySnapshot = await getDocs(collection(db, name));
+                        var Chapter = [];
+                        querySnapshot.forEach(doc => {
+                            Chapter.push(doc.data());
+                        });
+                        AddAllItemsToTable(Chapter);
+
+                    }
+
+                    async function getAllDataRealtime() {
+                            const dbRef = collection(db, name);
+                            onSnapshot(dbRef,(querySnapshot)  => {
+                                var chapter = [];
+                                querySnapshot.forEach(doc => {
+                                    chapter.push(doc.data());
+                                });
+                                AddAllItemsToTable(chapter);
+                            });
+                            }
+
+                    window.onload = getAllDataRealtime;
 
 
+                </script>
+
+
+                
+                <script >
+                    
+                    function myFunction(myID,myVal) {
+                        // document.getElementById("demo").innerHTML = myID;
+                        // document.getElementById(myID).value = "Remove"
+                        myVal.value="Remove"
+                        console.log("myfunction");
+                        console.log(localQues[parseInt(myID)]);
+                        QuizQuestions.push(localQues[parseInt(myID)]);
+                        console.log("Final Question");
+                        console.log(QuizQuestions);
+                        const Qname = document.getElementById('QuizName').value; 
+
+                       
+                    }
                 </script>
 
                 <button type="submit" id="btn_submit" style="background-color: #4CAF50; /* Green */
@@ -589,6 +658,7 @@
                             text-decoration: none;
                             display: inline-block;
                             font-size: 16px;">Create Quiz</button>
+
 
 
 
