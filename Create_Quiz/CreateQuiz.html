@@ -517,7 +517,7 @@
                         td8.innerHTML = CA;
                         td10.innerHTML = Question_no;
 
-                        td9.innerHTML = "<button id =" + Question_no + "value='Add' onclick='myFunction((this.id,this.value).toString())'>Add Question</button>";
+                        td9.innerHTML = "<button id =" + Question_no + "value='Add' onclick='myFunction((this.id).toString())'>Add Question</button>";
                         //td9.innerHTML = "<a href='../../subject_homePage/Subject_home_page.html?subject="+name+"' ><i class='fa fa-eye' aria-hidden='true' ></i></a>"
                         //td9.innerHTML = "<button onclick='myFunction(type, marks, question, OA, OB, OC, OD, CA)'>Click me</button>";
 
@@ -635,10 +635,10 @@
                 
                 <script >
                     
-                    function myFunction(myID,myVal) {
+                    function myFunction(myID) {
                         // document.getElementById("demo").innerHTML = myID;
                         // document.getElementById(myID).value = "Remove"
-                        myVal.value="Remove"
+                        
                         console.log("myfunction");
                         console.log(localQues[parseInt(myID)]);
                         QuizQuestions.push(localQues[parseInt(myID)]);
