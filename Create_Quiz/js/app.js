@@ -87,6 +87,7 @@ document.getElementById("btn_submit").addEventListener("click", function () {
         const chapterRef = doc(db, name, Qname);
         updateDoc(chapterRef, {
           paper: arrayUnion(newMap),
+          title: Qname,
         });
         console.log("Update successfully in paper");
     }
